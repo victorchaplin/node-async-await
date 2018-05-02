@@ -46,30 +46,43 @@ const getStatus = (userId) => {
         user = tempUser
         return getGrades(user.schoolId)
     }).then((grades) => {
-        let average = 0
-
-        if (grades.length > 0) {
-            average = grades.map((grade) => grade.grade).reduce((a, b) => a + b) / grades.length
-        }
-
-        return `${user.name} has a ${average} in the class.`
+        
     })
 }
 
-getUser(21).then((user) => {
-    console.log(user)
-}).catch((error) => {
-    console.log(error)
-})
+const getStatusAlt = async (userId) => {
+    const user = await getUser(userId)
+    const grades = await getGrades(user.schoolId)
 
-getGrades(12).then((grade) => {
-    console.log(grade)
-}).catch((error) => {
-    console.log(error)
-})
+    let average = 0
 
-getStatus(123).then((status) => {
+    if (grades.length > 0) {
+        average = grades.map((grade) => grade.grade).reduce((a, b) => a + b) / grades.length
+    }
+
+    return `${user.name} has a ${average}% in the class.`
+}
+
+getStatusAlt(2).then((status) => {
     console.log(status)
 }).catch((error) => {
     console.log(error)
 })
+
+// getUser(21).then((user) => {
+//     console.log(user)
+// }).catch((error) => {
+//     console.log(error)
+// })
+
+// getGrades(12).then((grade) => {
+//     console.log(grade)
+// }).catch((error) => {
+//     console.log(error)
+// })
+
+// getStatus(123).then((status) => {
+//     console.log(status)
+// }).catch((error) => {
+//     console.log(error)
+// })
