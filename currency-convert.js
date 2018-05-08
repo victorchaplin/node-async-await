@@ -22,13 +22,28 @@ const getCountries = (currencyCode) => {
 }
 
 const convertCurrency = (from, to, amount) => {
-    return getCountries(to).then((countries) => {
+    let countries
+    return getCountries(to).then((tempCountries) => {
+        countries = tempCountries
         return getExchangeRate(from, to)
     }).then((rate) => {
         const exchangedAmount = amount * rate
 
-        return `${amount} ${from} is worth ${exchangedAmount} ${to}.`
+        return `${amount} ${from} is worth ${exchangedAmount} ${to}. ${to} can be used in the following countries: ${countries.join(', ')}`
     })
+}
+
+// Create converCurrencyAlt as async function
+// Get countries and rate using await and our two functions
+// Calculate exchangedAmount
+// return status string
+
+const convertCurrencyAlt = async (from, to, amount) => {
+    const countries = await getCountries(to)
+    const rate = await getExchangeRate(from, to)
+    const exchangedAmount = amount * rate
+
+    return `${amount} ${from} is worth ${exchangedAmount} ${to}. ${to} can be used in the following countries: ${countries.join(', ')}`
 }
 
 // getExchangeRate('EUR', 'CAD').then((rate) => {
@@ -39,6 +54,10 @@ const convertCurrency = (from, to, amount) => {
 //     console.log(countries)
 // })
 
-convertCurrency('EUR', 'BRL', 100).then((status) => {
+// convertCurrency('EUR', 'BRL', 100).then((status) => {
+//     console.log(status)
+// })
+
+convertCurrencyAlt('EUR', 'USD', 100).then((status) => {
     console.log(status)
 })
