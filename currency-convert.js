@@ -7,18 +7,26 @@ const axios = require('axios')
 
 const fixerApiKey = '9f34a42fdf4965543e3dceaf10cad6b6'
 
-const getExchangeRate = (from, to) => {
+const getExchangeRate = async (from, to) => {
     const fixerUrl = `http://data.fixer.io/api/latest?access_key=${fixerApiKey}&base=${from}`
-    return axios.get(fixerUrl).then((response) => {
+    try {
+        const response = await axios.get(fixerUrl)
+        
         return response.data.rates[to]
-    })
+    } catch (error) {
+
+    }
 }
 
-const getCountries = (currencyCode) => {
+const getCountries = async (currencyCode) => {
     const restCountriesUrl = `https://restcountries.eu/rest/v2/currency/${currencyCode}`
-    return axios.get(restCountriesUrl).then((response) => {
+    try {
+        const response = await axios.get(restCountriesUrl)
+
         return response.data.map((country) => country.name)
-    })
+    } catch (error) {
+        throw new Error(`Unable to get countries that use ${currencyCode}`)
+    }
 }
 
 const convertCurrency = (from, to, amount) => {
@@ -58,6 +66,8 @@ const convertCurrencyAlt = async (from, to, amount) => {
 //     console.log(status)
 // })
 
-convertCurrencyAlt('EUR', 'USD', 100).then((status) => {
+convertCurrencyAlt('EUR', 'MMM', 100).then((status) => {
     console.log(status)
+}).catch((error) => {
+    console.log(error.message)
 })
