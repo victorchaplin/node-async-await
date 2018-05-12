@@ -11,10 +11,15 @@ const getExchangeRate = async (from, to) => {
     const fixerUrl = `http://data.fixer.io/api/latest?access_key=${fixerApiKey}&base=${from}`
     try {
         const response = await axios.get(fixerUrl)
-        
-        return response.data.rates[to]
-    } catch (error) {
+        const rate = response.data.rates[to]
 
+        if (rate) {
+            return rate
+        } else {
+            throw new Error()
+        }
+    } catch (error) {
+        throw new Error(`Unable to get exchange rate for ${from} and ${to}.`)
     }
 }
 
@@ -25,7 +30,7 @@ const getCountries = async (currencyCode) => {
 
         return response.data.map((country) => country.name)
     } catch (error) {
-        throw new Error(`Unable to get countries that use ${currencyCode}`)
+        throw new Error(`Unable to get countries that use ${currencyCode}.`)
     }
 }
 
